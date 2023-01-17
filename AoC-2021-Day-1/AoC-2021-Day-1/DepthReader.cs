@@ -32,5 +32,11 @@ namespace AoC_2021_Day_1
             var fileContent = await File.ReadAllTextAsync(fileName);
             return fileContent.Split(Environment.NewLine).Select(int.Parse).ToArray();
         }
+
+        //public static int[] ReadDepthValues(string fileName)
+        //{
+        //    var fileContent = File.ReadAllText(fileName);
+        //    return fileContent.Split(Environment.NewLine).Select(int.Parse).ToArray();
+        //}
     }
 }
