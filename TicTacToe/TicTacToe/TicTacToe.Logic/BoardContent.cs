@@ -6,6 +6,8 @@ namespace TicTacToe.Logic
 {
     public interface IReadOnlyBoardContent
     {
+        SquareContent[] Content { get; }
+
         SquareContent Get(int col, int row);
 
         //internal SquareContent? GetWinnerFromRows()
