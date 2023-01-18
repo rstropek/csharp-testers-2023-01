@@ -7,9 +7,68 @@ namespace TicTacToe.Logic
     public interface IReadOnlyBoardContent
     {
         SquareContent Get(int col, int row);
+
+        //internal SquareContent? GetWinnerFromRows()
+        //{
+        //    for (var row = 0; row < 3; row++)
+        //    {
+        //        if (Get(0, row) != SquareContent.Empty &&
+        //            Get(0, row) == Get(1, row) &&
+        //            Get(1, row) == Get(2, row))
+        //        {
+        //            return Get(0, row);
+        //        }
+        //    }
+
+        //    return null;
+        //}
+
+        //internal SquareContent? GetWinnerFromCols()
+        //{
+        //    for (var col = 0; col < 3; col++)
+        //    {
+        //        if (Get(col, 0) != SquareContent.Empty &&
+        //            Get(col, 0) == Get(col, 1) &&
+        //            Get(col, 1) == Get(col, 2))
+        //        {
+        //            return Get(col, 0);
+        //        }
+        //    }
+
+        //    return null;
+        //}
+
+        //internal SquareContent? GetWinnerFromDiagonals()
+        //{
+        //    if (Get(0, 0) != SquareContent.Empty &&
+        //        Get(0, 0) == Get(1, 1) &&
+        //        Get(1, 1) == Get(2, 2))
+        //    {
+        //        return Get(0, 0);
+        //    }
+
+        //    if (Get(2, 0) != SquareContent.Empty &&
+        //        Get(2, 0) == Get(1, 1) &&
+        //        Get(1, 1) == Get(0, 2))
+        //    {
+        //        return Get(2, 0);
+        //    }
+
+        //    return null;
+        //}
+
+        //internal SquareContent? GetWinner() =>
+        //    GetWinnerFromRows() ?? GetWinnerFromCols() ?? GetWinnerFromDiagonals();
     }
 
-    public class BoardContent : IReadOnlyBoardContent
+    public interface IWriteableBoardContent
+    {
+        void Set(int col, int row, SquareContent value);
+    }
+
+    public interface IBoardContent : IReadOnlyBoardContent, IWriteableBoardContent { }
+
+    public class BoardContent : IBoardContent
     {
         internal readonly SquareContent[] content;
 
@@ -61,7 +120,7 @@ namespace TicTacToe.Logic
             {
                 throw new SquareAlreadyOccupiedException(col, row);
             }
-            
+
             content[index] = value;
         }
     }

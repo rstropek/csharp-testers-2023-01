@@ -45,5 +45,24 @@ namespace TicTacToe.Tests
 
             Assert.Equal(SquareContent.X, Game.GetWinnerFromDiagonals(bcMock.Object));
         }
+
+        [Fact]
+        public void CurrentPlayerChangesOnSet()
+        {
+            var game = new Game(Mock.Of<IBoardContent>());
+            Assert.Equal(Players.X, game.currentPlayer);
+            game.Set(0, 0);
+            Assert.Equal(Players.O, game.currentPlayer);
+        }
+
+        [Fact]
+        public void SetInGameCallsSetOfBoardCorrectly()
+        {
+            var bcMock = new Mock<IBoardContent>();
+            bcMock.Setup(x => x.Set(1, 2, SquareContent.X));
+            var game = new Game(bcMock.Object);
+            game.Set(1, 2);
+            bcMock.VerifyAll();
+        }
     }
 }

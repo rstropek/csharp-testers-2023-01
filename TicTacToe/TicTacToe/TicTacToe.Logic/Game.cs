@@ -1,7 +1,21 @@
 ﻿namespace TicTacToe.Logic
 {
-    public class Game
+    public enum Players { X, O }
+
+    public interface IGame
     {
+        Players? Winner { get; }
+
+        void Set(int col, int row);
+    }
+
+    public class Game : IGame
+    {
+        private readonly IBoardContent content;
+        internal Players currentPlayer = Players.X;
+
+        public Game(IBoardContent content) { this.content = content; }
+        
         internal static SquareContent? GetWinnerFromRows(IReadOnlyBoardContent content)
         {
             for (var row = 0; row < 3; row++)
@@ -53,5 +67,23 @@
 
         internal static SquareContent? GetWinner(IReadOnlyBoardContent content) =>
             GetWinnerFromRows(content) ?? GetWinnerFromCols(content) ?? GetWinnerFromDiagonals(content);
+
+        public void Set(int col, int row)
+        {
+            content.Set(col, row, currentPlayer switch
+            {
+                Players.X => SquareContent.X,
+                Players.O => SquareContent.O,
+                _ => throw new InvalidOperationException("Invalid player")
+            });
+            currentPlayer = currentPlayer == Players.X ? Players.O : Players.X;
+        }
+
+        public Players? Winner => GetWinner(content) switch
+        { 
+            SquareContent.X => Players.X, 
+            SquareContent.O => Players.O, 
+            _ => null
+        };
     }
 }
