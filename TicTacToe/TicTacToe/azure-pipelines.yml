@@ -1,0 +1,34 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+  - task: UseDotNet@2
+    displayName: '⚙️ Setup correct .NET version'
+    inputs:
+      version: '7.x'
+  - task: DotNetCoreCLI@2
+    displayName: '📦 Restore NuGet packages'
+    inputs:
+      command: 'restore'
+  - task: DotNetCoreCLI@2
+    displayName: '🏗️ Build solution'
+    inputs:
+      command: 'build'
+      arguments: '--configuration $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: '🧪 Run tests'
+    inputs:
+      command: test
+      arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+      publishTestResults: true
+  - task: PublishCodeCoverageResults@1
+    displayName: '🧪 Publish code coverage report'
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
